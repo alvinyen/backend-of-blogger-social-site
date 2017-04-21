@@ -6,12 +6,22 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const dbConnectionString = require('./config/config').dbConnectionString;
+const User = require('./models/user');
 
 console.log(dbConnectionString);
 mongoose.connect(dbConnectionString);
 const db = mongoose.connection;
 db.on('error', (err) => { console.log('connection failed!', err); } );
-db.once('open', () => { console.log('success'); } );
+db.once('open', () => { 
+    console.log('success'); 
+    //1. 創建實體
+    let user = new User({
+        username: 'alvin',
+        password: 'daniel'
+    });
+    //2. 保存
+    user.save();
+} );
 
 app.use(bodyParser.urlencoded( {extended: false } ));
 app.use(bodyParser.json());
