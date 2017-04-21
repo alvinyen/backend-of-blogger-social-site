@@ -1,3 +1,6 @@
 module.exports = {
-    port: 1234
+    port: 3000,
+    dbConnectionString: 'mongodb://blablabla',
+    SALT_FACTOR: 'xxxxxxx',
+    secret: 'xxxxxxxxxxxxxxxxxx'
 } ;
