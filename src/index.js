@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const dbConnectionString = require('./config/config').dbConnectionString;
 const User = require('./models/user');
+const cors = require('cors') ;
 
 console.log(dbConnectionString);
 mongoose.connect(dbConnectionString);
@@ -26,6 +27,7 @@ db.once('open', () => {
 app.use(bodyParser.urlencoded( {extended: false } ));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+app.use(cors());
 
 rootRoutes(app);
 app.listen(port, ()=>{
