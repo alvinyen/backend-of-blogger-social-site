@@ -28,6 +28,13 @@ UserSchema.pre('save', function(next){
     } );
 });
 
+UserSchema.methods.comparePassword = function(password, callback){
+    bcrypt.compare(password, this.password, (err, isMatch) => {
+        if(err) { return callback(err); }
+        callback(null, isMatch);
+    });
+}
+
 //指定Schema所對應的collection
 //第1個參數代表collection名，進到mongodb之後首字會被轉為小寫、且會轉為復數型 (單複數同型就只會把首字轉為小寫)
 module.exports = mongoose.model('User', UserSchema);
