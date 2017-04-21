@@ -16,8 +16,8 @@ db.once('open', () => {
     console.log('success'); 
     //1. 創建實體
     let user = new User({
-        username: 'alvin',
-        password: 'daniel'
+        username: 'ddududud',
+        password: 'duuudududu'
     });
     //2. 保存
     user.save();

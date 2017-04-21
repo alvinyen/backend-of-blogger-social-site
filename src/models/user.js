@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const SALT_FACTOR = require('./../config/config').SALT_FACTOR ;
 
 const Schema = mongoose.Schema ;
 
@@ -10,6 +12,21 @@ const UserSchema = new Schema(
     },
     { timestamps: true }
 );
+
+//set UserSchema's pre hook to encrypt every time when .save() 
+UserSchema.pre('save', function(next){
+    const user = this ;
+    bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
+        if (err) return next(err) ;
+        // 如果沒錯就用salt去做hash，對密碼明文做加密
+        bcrypt.hash(user.password, salt, (err, hash) => {
+            // console.log(hash);
+            if(err) return next(err) ;
+            user.password = hash;
+            next();
+        }) ;
+    } );
+});
 
 //指定Schema所對應的collection
 //第1個參數代表collection名，進到mongodb之後首字會被轉為小寫、且會轉為復數型 (單複數同型就只會把首字轉為小寫)
