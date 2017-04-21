@@ -1,9 +1,9 @@
 module.exports = (app) => {
-    app.post('/test', (req, res) => {
+    app.post('/auth/login', (req, res) => {
         console.log(req.body);
         return res.json({
-            name: req.body.name,
-            age: req.body.age
+            username: req.body.name,
+            password: req.body.password
         });
     } );
 }
