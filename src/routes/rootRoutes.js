@@ -61,7 +61,12 @@ module.exports = (app) => {
                 user: { name: user.username }
             });
         } catch (e) {
-            return console.log('oops...', e);
+            if (e.name === 'MongoError' && e.code === 11000) {
+                // Duplicate username
+                console.log('User already exist!') ;
+                return res.status(500).send({ errorMsg: 'User already exist!' });
+            }
+            return console.log(e);
         }
     });
     app.post('/posts', requireAuth, async function (req, res) {
@@ -74,7 +79,20 @@ module.exports = (app) => {
             console.log(e);
         }
         res.json({
-            message: '新增文章成功~~'
+            message: '新增文章成功~~',
+            post: {
+                name: post.name,
+                content: post.content
+            }
         });
     });
+    app.get('/posts', function (req, res) {
+        Post.find({}, 'name', function (err, posts) {
+            if (err) return console.log(err);
+            res.json({
+                posts: posts,
+                message: '你得到所有文章了呢！！'
+            });
+        })
+    })
 }
