@@ -1,6 +1,7 @@
 const User = require('./../models/user');
 const jwt = require('jsonwebtoken');
 const secret = require('./../config/config').secret;
+const Post = require('./../models/post');
 
 const genToken = (user) => {
     return jwt.sign(user, secret, {
@@ -38,4 +39,17 @@ module.exports = (app) => {
             return console.log('oops...', e);
         }
     } );
+    app.post('/posts', async function(req, res){
+        let post = new Post();
+        post.name = req.body.name ;
+        post.content = req.body.content ;
+        try {
+            await post.save();
+        }catch(e){
+            console.log(e);
+        }
+        res.json({
+            message: '新增文章成功~~'
+        });
+    });
 }
