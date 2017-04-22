@@ -18,8 +18,8 @@ module.exports = (app) => {
                 if (err) { return console.log(err); }
                 if (!isMatch) { return res.status(403).json({ error: "密碼無效~~" }); }
                 return res.json({
-                    token: genToken( {name: user.username} ),
-                    user: { name: user.username }
+                    token: genToken( {name: user.username, admin: user.admin} ),
+                    user: { name: user.username, admin: user.admin }
                 });
             });
         });
