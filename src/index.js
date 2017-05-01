@@ -24,7 +24,7 @@ db.once('open', () => {
     user.save();
 } );
 
-app.use(bodyParser.urlencoded( {extended: false } ));
+app.use(bodyParser.urlencoded( {extended: true } ));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(cors());
