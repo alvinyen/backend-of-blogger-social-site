@@ -6,6 +6,7 @@
 ## API SPEC.
 - host：http://api.alvinyen.me:3000
 - /auth/login
+    - 登入
     - Request Method: POST
     - Content-Type：application/json
     - Request Data in Body:
@@ -29,6 +30,7 @@
             }
             ```
 - /auth/signup
+    - 註冊
     - Request Method: POST
     - Content-Type：application/json
     - Request Data in Body:
@@ -71,7 +73,6 @@
 - /posts
     - 獲取所有文章
     - Request Method: GET
-    - Content-Type：application/json
     - Response
         - Content-Type：application/json
         - Body: 
@@ -94,6 +95,9 @@
     - Content-Type：application/json
     - Request Parameters:
         - post_id: 文章id (document id)
+    - Request Data in Body:
+        - name：文章名稱
+        - content：文章內容
     - Error Handling：
         - { error: '錯誤訊息' }
     - Response
@@ -112,7 +116,6 @@
 - /posts/:post_id
     - 針對單篇文章修改標題或內容
     - Request Method: DELETE
-    - Content-Type：application/json
     - Request Parameters:
         - post_id: 文章id (document id)
     - Error Handling：
