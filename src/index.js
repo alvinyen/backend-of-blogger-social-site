@@ -26,9 +26,9 @@ db.once('open', () => {
     //     if (err) { console.log('testPost1 save failed：', err); }
     //     console.log('testPost1 save successed：', result);
     // });
-    PostModel.find({}).sort({ postId: 1 }).exec((err, postArray) => {
-        console.log(postArray);
-    });
+    // PostModel.find({}).sort({ postId: 1 }).exec((err, postArray) => {
+    //     console.log(postArray);
+    // });
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));

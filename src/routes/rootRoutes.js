@@ -85,9 +85,9 @@ module.exports = (app) => {
         });
     });
     app.get('/posts', function (req, res) {
-        Post.find({}, 'name postId').sort({ postId: 1 }).exec(function (err, postArray) {
+        Post.find({}, 'name postId').sort({ postId: -1 }).exec(function (err, postArray) {
             if (err) return console.log(err);
-            console.log(postArray);
+            // console.log(postArray);
             res.json({
                 posts: postArray,
                 message: '你得到所有文章了呢！！'
@@ -103,21 +103,17 @@ module.exports = (app) => {
     });
                                 // 驗證是否為管理員
     app.put('/posts/:post_id', requireAuth, function (req, res) {
-        Post.findById({ _id: req.params.post_id }, function (err, post) {
-            if (err) return res.status(500).json({ error: err.message });
-
-            post.name = req.body.name;
-            post.content = req.body.content;
-
-            post.save(function (err) {
-                if (err) return res.status(500).json({ error: err.message });
-                res.json({
-                    post: post,
-                    message: '文章更新成功了！'
-                });
+        Post.findByIdAndUpdate(req.params.post_id, { name: req.body.name, content: req.body.content }, (err, updatedPost) => {
+            if (err) { console.log('update err：', err); }
+            // console.log('update successed');
+            // console.log(updatedPost);
+            res.json({
+                post: updatedPost,
+                message: '文章更新成功了！'
             });
         });
     });
+    
     app.delete('/posts/:post_id', requireAuth, function (req, res) {
         if(req.params.post_id === undefined || req.params.post_id === 'undefined') res.status(400).json({ error: `post_id === undefined` });
         const id = req.params.post_id;
