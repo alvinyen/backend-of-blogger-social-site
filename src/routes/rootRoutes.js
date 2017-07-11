@@ -85,7 +85,7 @@ module.exports = (app) => {
         });
     });
     app.get('/posts', function (req, res) {
-        Post.find({}, 'name').sort({ postId: 1 }).exec(function (err, postArray) {
+        Post.find({}, 'name, postId').sort({ postId: 1 }).exec(function (err, postArray) {
             if (err) return console.log(err);
             console.log(postArray);
             res.json({
