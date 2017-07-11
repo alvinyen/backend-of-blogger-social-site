@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const dbConnectionString = require('./config/config').dbConnectionString;
 const User = require('./models/user');
+const PostModel = require('./models/post');
 const cors = require('cors') ;
 
 console.log(dbConnectionString);
@@ -14,17 +15,23 @@ mongoose.connect(dbConnectionString);
 const db = mongoose.connection;
 db.on('error', (err) => { console.log('connection failed!', err); } );
 db.once('open', () => { 
-    console.log('success'); 
-    //1. 創建實體
-    let user = new User({
-        username: 'alvinnnn',
-        password: 'cestlavi'
+    console.log('connection successed');
+    // let testPost1 = new PostModel(
+    //     {
+    //         name: 'best football game',
+    //         content: 'best is the best',
+    //     }
+    // );
+    // testPost1.save((err, result) => {
+    //     if (err) { console.log('testPost1 save failed：', err); }
+    //     console.log('testPost1 save successed：', result);
+    // });
+    PostModel.find({}).sort({ postId: 1 }).exec((err, postArray) => {
+        console.log(postArray);
     });
-    //2. 保存
-    user.save();
-} );
+});
 
-app.use(bodyParser.urlencoded( {extended: true } ));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(cors());

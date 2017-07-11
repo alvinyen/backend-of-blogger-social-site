@@ -79,18 +79,20 @@ module.exports = (app) => {
             message: '新增文章成功~~',
             post: {
                 name: post.name,
-                content: post.content
+                content: post.content,
+                postId: res.postId,
             }
         });
     });
     app.get('/posts', function (req, res) {
-        Post.find({}, 'name', function (err, posts) {
+        Post.find({}, 'name').sort({ postId: 1 }).exec(function (err, postArray) {
             if (err) return console.log(err);
+            console.log(postArray);
             res.json({
-                posts: posts,
+                posts: postArray,
                 message: '你得到所有文章了呢！！'
             });
-        })
+        });
     });
     app.get('/posts/:post_id', function (req, res) {
         Post.findById({ _id: req.params.post_id }, function (err, post) {
@@ -99,6 +101,7 @@ module.exports = (app) => {
             res.json({ post });
         })
     });
+                                // 驗證是否為管理員
     app.put('/posts/:post_id', requireAuth, function (req, res) {
         Post.findById({ _id: req.params.post_id }, function (err, post) {
             if (err) return res.status(500).json({ error: err.message });
