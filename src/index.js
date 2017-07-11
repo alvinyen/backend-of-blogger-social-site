@@ -16,16 +16,16 @@ const db = mongoose.connection;
 db.on('error', (err) => { console.log('connection failed!', err); } );
 db.once('open', () => { 
     console.log('connection successed');
-    let testPost1 = new PostModel(
-        {
-            name: 'best football game',
-            content: 'best is the best',
-        }
-    );
-    testPost1.save((err, result) => {
-        if (err) { console.log('testPost1 save failed：', err); }
-        console.log('testPost1 save successed：', result);
-    });
+    // let testPost1 = new PostModel(
+    //     {
+    //         name: 'best football game',
+    //         content: 'best is the best',
+    //     }
+    // );
+    // testPost1.save((err, result) => {
+    //     if (err) { console.log('testPost1 save failed：', err); }
+    //     console.log('testPost1 save successed：', result);
+    // });
     PostModel.find({}).sort({ postId: 1 }).exec((err, postArray) => {
         console.log(postArray);
     });
