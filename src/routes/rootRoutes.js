@@ -2,6 +2,8 @@ const User = require('./../models/user');
 const jwt = require('jsonwebtoken');
 const secret = require('./../config/config').secret;
 const Post = require('./../models/post');
+const CommentModel = require('./../models/CommentModel');
+const mongoose = require('mongoose');
 
 const genToken = (user) => {
     return jwt.sign(user, secret, {
@@ -23,7 +25,7 @@ const requireAuth = (req, res, next) => {
                 if (decoded.admin === true) {
                     next();
                 } else {
-                    res.status(401).json({ error: '認證失敗..' });
+                    res.status(401).json({ error: '認證失敗..你不是管理員啦！' });
                 }
             }
         });
@@ -124,6 +126,43 @@ module.exports = (app) => {
                     _id: id,
                     message: '文章移除成功！'
                 });
+            });
+        });
+    });
+
+    // below are api of comments
+
+    app.post('/comments', async function (req, res) {
+        let comment = new CommentModel();
+        comment.post_id = mongoose.Types.ObjectId(req.body.post_id);
+        comment.name = req.body.name;
+        comment.when = req.body.when;
+        comment.comment = req.body.comment;
+        try {
+            await comment.save();
+        } catch (e) {
+            console.log(e);
+        }
+        res.json({
+            message: '新增comment成功~~',
+            comment: {
+                post_id: comment.post_id,
+                commentId: comment.commentId,
+                name: comment.name,
+                when: comment.when,
+                comment: comment.comment,
+            },
+        });
+    });
+
+    app.get('/comments/:post_id', function (req, res) {
+        // console.log(req.params.post_id);
+        CommentModel.find({ post_id: mongoose.Types.ObjectId(req.params.post_id) }, 'commentId name when comment').sort({ commentId: -1 }).exec(function (err, commentsArray) {
+            if (err) return console.log(err);
+            // console.log(commentsArray);
+            res.json({
+                comments: commentsArray,
+                message: '你得到所有comments了呢！！'
             });
         });
     });
