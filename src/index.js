@@ -22,7 +22,7 @@ io.on('connection', async (socket) => {
 
   if (socket.handshake.query.post_id !== undefined) {
     const post_id = mongoose.Types.ObjectId(socket.handshake.query.post_id);
-    await CommentModel.find({ post_id }, 'commentId name when comment').sort({ commentId: -1 }).exec( async function (err, commentsArray) {
+    await CommentModel.find({ post_id }, 'commentId name when comment').sort({ commentId: 1 }).exec( async function (err, commentsArray) {
       if (err) return console.log(err);
       console.log(commentsArray);
       await socket.emit('initialComments', {
@@ -31,6 +31,34 @@ io.on('connection', async (socket) => {
       });
     });
   }
+
+  socket.on('addComment', async function ({ post_id, name, when, comment }) {
+    let commentInstance = new CommentModel();
+    commentInstance.post_id = mongoose.Types.ObjectId(post_id);
+    commentInstance.name = name;
+    commentInstance.when = when;
+    commentInstance.comment = comment;
+    try {
+        await commentInstance.save();
+    } catch (e) {
+        console.log(e);
+    }
+
+    io.sockets.emit('commentAdded', {
+      message: '新增comment成功~~',
+      comment: {
+          post_id: commentInstance.post_id,
+          commentId: commentInstance.commentId,
+          name: commentInstance.name,
+          when: commentInstance.when,
+          comment: commentInstance.comment,
+      },
+    });
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} disconnected`);
+  });
 
   socket.on('my other event', function (data) {
     console.log(data);
