@@ -63,6 +63,15 @@ io.on('connection', async (socket) => {
   socket.on('my other event', function (data) {
     console.log(data);
   });
+
+  socket.on('typing', (handle, post_id) => {
+    console.log(post_id);
+    socket.broadcast.emit('typing', handle, post_id);
+  });
+
+  socket.on('clearIsTyping', (post_id) => {
+    io.sockets.emit('clearIsTyping', post_id);
+  });
 });
 
 // io.on('connection',  (socket) => {
