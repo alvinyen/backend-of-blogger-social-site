@@ -117,7 +117,7 @@ app.use(morgan('dev'));
 
 app.use(express.static(__dirname + '/public'));
 
-const whiteList = ['http://www.alvinyen.me', 'http://localhost:8080'];
+const whiteList = require('./config/config').whiteList;
 
 const corsOptions = {
   origin: whiteList,
