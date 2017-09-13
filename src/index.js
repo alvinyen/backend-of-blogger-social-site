@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const http = require('http');
-const socketServer =require('socket.io');
+const socketServer = require('socket.io');
 
 const app = express();
 
@@ -117,8 +117,10 @@ app.use(morgan('dev'));
 
 app.use(express.static(__dirname + '/public'));
 
+const whiteList = ['http://www.alvinyen.me', 'http://localhost:8080'];
+
 const corsOptions = {
-  origin: 'http://localhost:8080',
+  origin: whiteList,
   credentials: true
 };
 app.use(cors(corsOptions));
